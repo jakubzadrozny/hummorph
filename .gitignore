@@ -1,0 +1,33 @@
+# Experiment files except configs for pre-trained models
+experiments/*
+!experiments/hummorph
+
+experiments/hummorph/*
+!experiments/hummorph/dna_rendering
+!experiments/hummorph/humman
+
+experiments/hummorph/dna_rendering/*
+!experiments/hummorph/dna_rendering/hummorph_dna_rendering
+!experiments/hummorph/dna_rendering/hummorph_dna_rendering_estim
+
+experiments/hummorph/humman/*
+!experiments/hummorph/humman/hummorph_humman
+!experiments/hummorph/humman/hummorph_humman_estim
+
+experiments/hummorph/dna_rendering/hummorph_dna_rendering/*
+!experiments/hummorph/dna_rendering/hummorph_dna_rendering/config.yaml
+
+experiments/hummorph/dna_rendering/hummorph_dna_rendering_estim/*
+!experiments/hummorph/dna_rendering/hummorph_dna_rendering_estim/config.yaml
+
+experiments/hummorph/humman/hummorph_humman/*
+!experiments/hummorph/humman/hummorph_humman/config.yaml
+
+experiments/hummorph/humman/hummorph_humman_estim/*
+!experiments/hummorph/humman/hummorph_humman_estim/config.yaml
+
+# Everything else
+third_parties/
+**/__pycache__
+*.ini
+.DS_Store

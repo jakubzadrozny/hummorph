@@ -1,0 +1,44 @@
+task: 'dna_rendering'
+experiment: 'hummorph_dna_rendering_estim'
+
+n_gpus: 1
+num_workers: 2
+
+embedder:
+  module: "core.nets.hummorph.embedders.fourier_pi"
+
+mweight_volume:
+  enable_in_iter: 5000
+
+train:
+  dataset: 'dna_rendering_train'
+  maxiter: 500000
+  lr: 0.0002
+  lr_mweight_vol_decoder: 0.00002
+  lr_blend_net: 0.00015
+  lrate_decay: 600
+  save_checkpt_interval: 5000
+  save_model_interval: 10000
+
+progress:
+  dataset: 'dna_rendering_test'
+  observed_frames:
+    - 0
+    - 5
+
+eval:
+  dataset: 'dna_rendering_test'
+  split: test
+  cutoff: 0.5
+  max_frames: 30
+  observed_frames:
+    - 0
+    - 0.25
+  
+resize_img_scale: 0.25
+
+use_estimated_smpl: True
+estimated_swap_prob_max: 0.75
+estimated_swap_warmup_kiter: 200
+
+chunk: 4096 # reduce if OOM

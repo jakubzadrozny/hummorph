@@ -1,0 +1,46 @@
+task: 'humman'
+experiment: 'hummorph_humman_estim'
+
+n_gpus: 1
+num_workers: 2
+
+mweight_volume:
+  enable_in_iter: 5000
+
+train:
+  dataset: 'humman_train'
+  maxiter: 500000
+  lr: 0.0002
+  lr_mweight_vol_decoder: 0.00002
+  lr_blend_net: 0.00015
+  lrate_decay: 400
+  save_checkpt_interval: 5000
+  save_model_interval: 10000
+  
+progress:
+  dataset: 'humman_test'
+  observed_frames:
+    - 0
+    - 5
+
+eval:
+  dataset: 'humman_test'
+  split: test
+  cutoff: 0.5
+  observed_frames:
+    - 0
+    - 0.25
+  
+resize_img_scale: 0.33
+resize_img_scale_obs: 0.25
+
+use_estimated_smpl: True
+estimated_swap_prob_max: 0.75
+estimated_swap_warmup_kiter: 150
+
+patch:
+  sample_subject_ratio: 0.9
+  N_patches: 5
+  size: 32      # [Patch] size of patch
+
+chunk: 4096 # reduce if OOM

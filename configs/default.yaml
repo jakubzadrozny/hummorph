@@ -1,0 +1,206 @@
+category: 'hummorph'
+
+##############################################3
+## Network Specs
+
+# modules
+network_module: 'core.nets.hummorph.hummorph'
+trainer_module: 'core.train.trainers.hummorph.trainer'
+lr_updater_module: 'core.train.trainers.hummorph.lr_updaters.exp_decay'
+optimizer_module: 'core.train.optimizers.hummorph.optimizer'
+
+feature_volume:
+  enabled: true
+  embedder_xyz:
+    multires: 6         # log2 of max freq for positional encoding (3D location)
+    i_embed: 0           # set 0 for default positional encoding, -1 for none
+  embedder_dir:
+    multires: 4         # log2 of max freq for positional encoding (3D location)
+    i_embed: 0           # set 0 for default positional encoding, -1 for none
+  volume_encoder:
+    module: 'core.nets.hummorph.unet3d.unet3d'
+    volume_size: 32
+    out_volume_size: 32
+    explicit_volume: false
+    model_channels: 32
+    n_heads: 2
+    attention_aggregation: true
+    blocks_per_res: 2
+    channel_mult:
+      - 1
+      - 2
+      - 4
+      - 8
+    attn_resolutions:
+      - 16
+      - 8
+      - 4
+
+feature_extractor:
+  module: 'core.nets.hummorph.feature_extract.feature_extractor'
+  out_dim: 32
+
+global_feature:
+  module: 'core.nets.hummorph.global_feature.global_feature'
+  enabled: True
+  map_depth: 2
+
+# positional embedder -- canonical mlp
+embedder:
+  module: "core.nets.hummorph.embedders.fourier"
+
+# positional embedder -- non-rigid motion mlp
+non_rigid_embedder:
+  module: "core.nets.hummorph.embedders.hannw_fourier"
+
+# canonical mlp
+canonical_mlp:
+  module: 'core.nets.hummorph.canonical_mlps.mlp_rgb_sigma'
+  mlp_depth: 8         # layers in network
+  mlp_width: 256       # channels per layer
+  multires: 10         # log2 of max freq for positional encoding (3D location)
+  i_embed: 0           # set 0 for default positional encoding, -1 for none
+  skips:
+    - 4
+    - 6
+
+# motion weights volume
+mweight_volume:
+  module: 'core.nets.hummorph.mweight_vol_decoders.globvol_mweights'
+  embedding_size: 256
+  volume_size: 32
+  feature_dim: 32
+  enable_in_iter: 0
+  projector:
+    module: 'core.nets.hummorph.projector.projector'
+  volume_encoder:
+    module: 'core.nets.hummorph.unet3d.unet3d'
+    volume_size: 32
+    out_volume_size: 32
+    explicit_volume: false
+    model_channels: 32
+    n_heads: 2
+    attention_aggregation: true
+    blocks_per_res: 2  
+    channel_mult:
+      - 1
+      - 2
+      - 4
+      - 8
+    attn_resolutions:
+      - 16
+      - 8
+      - 4
+  global_feature:
+    module: 'core.nets.hummorph.global_feature.global_feature'
+    map_depth: 2
+  
+blend_net:
+  module: 'core.nets.hummorph.blend.blend_with_glob'
+
+projector:
+  module: 'core.nets.hummorph.projector.projector'
+
+rgb_in_dim: 64
+
+##############################################3
+## Data Configuration
+
+train_keyfilter: ['rays',
+                  'motion_bases', 'motion_weights_priors',
+                  'cnl_bbox', 'dst_posevec_69', 'estimated_smpl']
+test_keyfilter: ['rays', 'target_rgbs', 
+                 'motion_bases', 'motion_weights_priors',
+                  'cnl_bbox', 'dst_posevec_69', 'joints_2d', 'estimated_smpl']
+
+train:
+  dataset_module: 'core.data.hummorph.train'
+  perturb: 1.        # only for training, set to 0. for no jitter, 1. for jitter
+  batch_size: 1
+  num_observed_frames: 2
+  subsample_observed_views: false
+  shuffle: True
+  drop_last: False
+  maxiter: 500000
+  lr: 0.0002
+  # lr_mweight_vol_decoder: 0.00002
+  # lr_blend_net: 0.0001
+  lrate_decay: 500
+  optimizer: 'adam'
+  log_interval: 25
+  save_checkpt_interval: 5000
+  save_model_interval: 10000
+  ray_shoot_mode: 'patch'
+  lossweights:
+    lpips: 1.0
+    mse: 0.3
+    consis: 2.0
+    dist: 0.1
+    smoothness: 0.005
+
+progress:
+  dataset_module: 'core.data.hummorph.train'
+  batch_size: 1
+  shuffle: False
+  drop_last: False
+  dump_interval: 5000
+
+eval:
+  dataset_module: 'core.data.hummorph.train'
+  batch_size: 1
+  shuffle: False
+  drop_last: False
+  cutoff: 0.0
+  offset: 1
+  large: False
+
+tpose:
+  batch_size: 1
+  shuffle: False
+  drop_last: False
+
+##############################################3
+## Misc
+
+n_gpus: 1
+num_workers: 1
+chunk: 2048 # reduce if OOM
+
+sex: 'neutral'
+total_bones: 24
+bbox_offset: 0.4
+canonical_bbox_offset: 0.15
+use_tight_human_bbox: false
+
+use_smpl_mweights: false
+clamp_fg_likelihood: true
+shift_canonical_joints: true
+
+use_estimated_smpl: false
+estimated_swap_prob_max: 1.0
+estimated_swap_warmup_kiter: 0
+
+load_net: latest
+save_all: True    # save all checkpoints
+
+patch:
+  sample_subject_ratio: 0.9
+  N_patches: 6
+  size: 32      # [Patch] size of patch
+fg_thread: 0.3
+
+N_samples: 128      # number of samples for each ray in coarse ray matching
+
+perturb: 1.        # only for training, set to 0. for no jitter, 1. for jitter
+
+crop_to_bbox: False
+plot_pose: True
+bgcolor: [255.0, 255.0, 255.0]
+
+write_imgs: False
+show_alpha: False
+show_truth: False
+
+hybrik:
+  root: /path/to/HybrIK
+  all: True
