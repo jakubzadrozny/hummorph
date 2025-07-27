@@ -170,8 +170,8 @@ For detailed formatting examples, please see `tools/prepare_humman/prepare_datas
 
 1. (Optional) Download pretrained models:
 - Trained on [HuMMan](https://caizhongang.com/projects/HuMMan):
-    - for _accurate_ body parameters: [download from Google Drive](https://drive.google.com/file/d/1pQSnxnf5ONH5FdlqFUPMdGN3XTPXiWDS/view?usp=share_link), place it in `experiments/hummorph/humman/hummorph_humman`,
-    - for _estimated_ body parameters: [download from Google Drive](https://drive.google.com/file/d/1J1Goqg8fUYRcfsuT1nNzKTuTrJgZw7lO/view?usp=share_link), place it in `experiments/hummorph/humman/hummorph_humman_estim`,
+    - for _accurate_ body parameters: [download from Google Drive](https://drive.google.com/file/d/1J1Goqg8fUYRcfsuT1nNzKTuTrJgZw7lO/view?usp=share_link), place it in `experiments/hummorph/humman/hummorph_humman`,
+    - for _estimated_ body parameters: [download from Google Drive](https://drive.google.com/file/d/1pQSnxnf5ONH5FdlqFUPMdGN3XTPXiWDS/view?usp=share_link), place it in `experiments/hummorph/humman/hummorph_humman_estim`,
 - Trained on [DNA-Rendering](https://dna-rendering.github.io/):
     - for _accurate_ body parameters: [download from Google Drive](https://drive.google.com/file/d/1aeNNpag007c_rL6KjVmdBCo53JloeHBW/view?usp=share_link), place it in `experiments/hummorph/dna_rendering/hummorph_dna_rendering`,
     - for _estimated_ body parameters: [download from Google Drive](https://drive.google.com/file/d/1Z-Pl5e7jPMo6wz3ViRwMVaRryrdpD_A3/view?usp=sharing), place it in `experiments/hummorph/dna_rendering/hummorph_dna_rendering_estim`.
