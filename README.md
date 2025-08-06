@@ -2,7 +2,7 @@
 
 [Jakub Zadrozny](https://jakubzadrozny.github.io/), 
 [Hakan Bilen](https://homepages.inf.ed.ac.uk/hbilen/) | 
-University of Edinburgh | **[ 🖥️ Project Page](https://jakubzadrozny.github.io/hummorph/)** | 
+University of Edinburgh | **[🔗 Project Page](https://jakubzadrozny.github.io/hummorph/)** | 
 **[📝 Paper](https://arxiv.org/abs/2504.19390)**
 
 <img src="./assets/cover_estim.png">
